@@ -5,7 +5,6 @@
 //  Created by Ryan Plitt on 8/9/16.
 //  Copyright © 2016 Ryan Plitt. All rights reserved.
 //
-
 import Foundation
 import UIKit
 import CloudKit
@@ -17,40 +16,30 @@ private let ModificationDateKey = "modificationDate"
 
 class CloudKitManager {
     
-    static let sharedController = CloudKitManager()
-    
-    // MARK: - Stored Properties
+   static let sharedController = CloudKitManager()
     
     let publicDatabase = CKContainer.defaultContainer().publicCloudDatabase
     let privateDatabase = CKContainer.defaultContainer().privateCloudDatabase
     
-    var currentUserRecordID: CKRecordID { CKContainer.defaultContainer().fetchUserRecordIDWithCompletionHandler { (record, error) in
-        return record
-        }
-        return CKRecordID(recordName: "")
-    }
-    
-    // MARK: - Initializer(s)
-    
     init() {
-            self.checkCloudKitAvailability()
+        //        checkCloudKitAvailability()
     }
     
     // MARK: - User Info Discovery
     
-    // If I'm logged in it'll fetch my record
-    func fetchLoggedInUserRecord(completion: ((record: CKRecord?, error: NSError?) -> Void)?) {
+    func fetchLoggedInUserRecord(completion: ((record: CKRecord?, error: NSError? ) -> Void)?) {
         
         CKContainer.defaultContainer().fetchUserRecordIDWithCompletionHandler { (recordID, error) in
             
-            if let error = error, completion = completion {
-                
+            if let error = error,
+                completion = completion {
                 completion(record: nil, error: error)
             }
             
-            if let recordID = recordID, completion = completion {
+            if let recordID = recordID,
+                completion = completion {
+                
                 self.fetchRecordWithID(recordID, completion: { (record, error) in
-                    
                     completion(record: record, error: error)
                 })
             }
@@ -63,31 +52,26 @@ class CloudKitManager {
         
         operation.discoverUserInfosCompletionBlock = { (emailsToUserInfos, userRecordIDsToUserInfos, operationError) -> Void in
             
-            if let userRecordIDsToUserInfos = userRecordIDsToUserInfos, userInfo = userRecordIDsToUserInfos[recordID], completion = completion {
+            if let userRecordIDsToUserInfos = userRecordIDsToUserInfos,
+                let userInfo = userRecordIDsToUserInfos[recordID] {
                 
-                completion(givenName: userInfo.displayContact?.givenName, familyName: userInfo.displayContact?.familyName)
+                completion?(givenName: userInfo.displayContact?.givenName, familyName: userInfo.displayContact?.familyName)
+                
             } else {
-                
-                if let completion = completion {
-                    
-                    completion(givenName: nil, familyName: nil)
-                }
+                completion?(givenName: nil, familyName: nil)
             }
         }
         
         CKContainer.defaultContainer().addOperation(operation)
     }
     
-    // Only users of this app are discoverable
     func fetchAllDiscoverableUsers(completion: ((userInfoRecords: [CKDiscoveredUserInfo]?) -> Void)?) {
         
         let operation = CKDiscoverAllContactsOperation()
         
         operation.discoverAllContactsCompletionBlock = { (discoveredUserInfos, error) -> Void in
             
-            if let completion = completion {
-                completion(userInfoRecords: discoveredUserInfos)
-            }
+            completion?(userInfoRecords:  discoveredUserInfos)
         }
         
         CKContainer.defaultContainer().addOperation(operation)
@@ -100,9 +84,7 @@ class CloudKitManager {
         
         publicDatabase.fetchRecordWithID(recordID) { (record, error) in
             
-            if let completion = completion {
-                completion(record: record, error: error)
-            }
+            completion?(record: record, error: error)
         }
     }
     
@@ -110,7 +92,7 @@ class CloudKitManager {
         
         var fetchedRecords: [CKRecord] = []
         
-        //        let predicate = predicate (not needed?)
+        let predicate = predicate
         let query = CKQuery(recordType: type, predicate: predicate)
         let queryOperation = CKQueryOperation(query: query)
         
@@ -119,7 +101,6 @@ class CloudKitManager {
             fetchedRecords.append(fetchedRecord)
             
             if let recordFetchedBlock = recordFetchedBlock {
-                
                 recordFetchedBlock(record: fetchedRecord)
             }
         }
@@ -127,19 +108,20 @@ class CloudKitManager {
         queryOperation.queryCompletionBlock = { (queryCursor, error) -> Void in
             
             if let queryCursor = queryCursor {
+                // there are more results, go fetch them
                 
                 let continuedQueryOperation = CKQueryOperation(cursor: queryCursor)
                 continuedQueryOperation.recordFetchedBlock = queryOperation.recordFetchedBlock
                 continuedQueryOperation.queryCompletionBlock = queryOperation.queryCompletionBlock
-            } else {
                 
-                if let completion = completion {
-                    completion(records: fetchedRecords, error: error)
-                }
+                self.publicDatabase.addOperation(continuedQueryOperation)
+                
+            } else {
+                completion?(records: fetchedRecords, error: error)
             }
         }
         
-        publicDatabase.addOperation(queryOperation)
+        self.publicDatabase.addOperation(queryOperation)
     }
     
     func fetchCurrentUserRecords(type: String, completion: ((records: [CKRecord]?, error: NSError?) -> Void)?) {
@@ -149,12 +131,8 @@ class CloudKitManager {
             if let record = record {
                 
                 let predicate = NSPredicate(format: "%K == %@", argumentArray: [CreatorUserRecordIDKey, record.recordID])
-                self.fetchRecordsWithType(type, predicate: predicate, recordFetchedBlock: nil, completion: { (records, error) in
-                    
-                    if let completion = completion {
-                        completion(records: records, error: error)
-                    }
-                })
+                
+                self.fetchRecordsWithType(type, predicate: predicate, recordFetchedBlock: nil, completion: completion)
             }
         }
     }
@@ -163,65 +141,46 @@ class CloudKitManager {
         
         let startDatePredicate = NSPredicate(format: "%K > %@", argumentArray: [CreationDateKey, fromDate])
         let endDatePredicate = NSPredicate(format: "%K < %@", argumentArray: [CreationDateKey, toDate])
-        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [startDatePredicate, endDatePredicate])
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [startDatePredicate, endDatePredicate])
         
-        self.fetchRecordsWithType(type, predicate: compoundPredicate, recordFetchedBlock: nil) { (records, error) in
+        
+        self.fetchRecordsWithType(type, predicate: predicate, recordFetchedBlock: nil) { (records, error) in
             
-            if let completion = completion {
-                
-                completion(records: records, error: error)
-            }
+            completion?(records: records, error: error)
         }
     }
+    
     
     // MARK: - Delete
     
     func deleteRecordWithID(recordID: CKRecordID, completion: ((recordID: CKRecordID?, error: NSError?) -> Void)?) {
         
         publicDatabase.deleteRecordWithID(recordID) { (recordID, error) in
-            
-            if let completion = completion {
-                
-                completion(recordID: recordID, error: error)
-            }
+            completion?(recordID: recordID, error: error)
         }
     }
     
-    func deleteReocordsWithID(recordIDs: [CKRecordID], completion: ((records: [CKRecord]?, recordIDs: [CKRecordID]?, error: NSError?) -> Void)?) {
+    func deleteRecordsWithID(recordIDs: [CKRecordID], completion: ((records: [CKRecord]?, recordIDs: [CKRecordID]?, error: NSError?) -> Void)?) {
         
         let operation = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: recordIDs)
         operation.savePolicy = .IfServerRecordUnchanged
         
-        operation.modifyRecordsCompletionBlock = { (records, recordIDs, error) -> Void in
-            
-            if let completion = completion {
-                
-                completion(records: records, recordIDs: recordIDs, error: error)
-            }
-        }
+        operation.modifyRecordsCompletionBlock = completion
     }
     
+    
     // MARK: - Save and Modify
+    
+    func saveRecords(records: [CKRecord], perRecordCompletion: ((record: CKRecord?, error: NSError?) -> Void)?, completion: ((records: [CKRecord]?, error: NSError?) -> Void)?) {
+        
+        modifyRecords(records, perRecordCompletion: perRecordCompletion, completion: completion)
+    }
     
     func saveRecord(record: CKRecord, completion: ((record: CKRecord?, error: NSError?) -> Void)?) {
         
         publicDatabase.saveRecord(record) { (record, error) in
             
-            if let completion = completion {
-                
-                completion(record: record, error: error)
-            }
-        }
-    }
-    
-    func saveRecords(records: [CKRecord], perRecordCompletion: ((record: CKRecord?, error: NSError?) -> Void)?, completion: ((records: [CKRecord]?, error: NSError?) -> Void)?) {
-        
-        modifyRecords(records, perRecordCompletion: perRecordCompletion) { (records, error) in
-            
-            if let completion = completion {
-                
-                completion(records: records, error: error)
-            }
+            completion?(record: record, error: error)
         }
     }
     
@@ -232,41 +191,32 @@ class CloudKitManager {
         operation.queuePriority = .High
         operation.qualityOfService = .UserInteractive
         
-        operation.perRecordCompletionBlock = { (record, error) -> Void in
-            
-            if let perRecordCompletion = perRecordCompletion {
-                
-                perRecordCompletion(record: record, error: error)
-            }
-        }
+        operation.perRecordCompletionBlock = perRecordCompletion
         
         operation.modifyRecordsCompletionBlock = { (records, recordIDs, error) -> Void in
-            
-            if let completion = completion {
-                
-                completion(records: records, error: error)
-            }
+            completion?(records: records, error: error)
         }
+        
+        publicDatabase.addOperation(operation)
     }
     
-    // MARK: - Subscriptions (allow for push notification, keep an eye on thigns)
     
-    func subscribe(type: String, predicate: NSPredicate, subscriptionID: String, isContentAvailable: Bool, alertBody: String? = nil, desiredKeys: [String]? = nil, options: CKSubscriptionOptions, completion: ((subscription: CKSubscription?, error: NSError?) -> Void)?) {
+    // MARK: - Subscriptions
+    
+    func subscribe(type: String, predicate: NSPredicate, subscriptionID: String, contentAvailable: Bool, alertBody: String? = nil, desiredKeys: [String]? = nil, options: CKSubscriptionOptions, completion: ((subscription: CKSubscription?, error: NSError?) -> Void)?) {
         
         let subscription = CKSubscription(recordType: type, predicate: predicate, subscriptionID: subscriptionID, options: options)
+        
         let notificationInfo = CKNotificationInfo()
         notificationInfo.alertBody = alertBody
-        notificationInfo.shouldSendContentAvailable = isContentAvailable
+        notificationInfo.shouldSendContentAvailable = contentAvailable
         notificationInfo.desiredKeys = desiredKeys
         
         subscription.notificationInfo = notificationInfo
         
         publicDatabase.saveSubscription(subscription) { (subscription, error) in
             
-            if let completion = completion {
-                
-                completion(subscription: subscription, error: error)
-            }
+            completion?(subscription: subscription, error: error)
         }
     }
     
@@ -274,10 +224,7 @@ class CloudKitManager {
         
         publicDatabase.deleteSubscriptionWithID(subscriptionID) { (subscriptionID, error) in
             
-            if let completion = completion {
-                
-                completion(subscriptionID: subscriptionID, error: error)
-            }
+            completion?(subscriptionID: subscriptionID, error: error)
         }
     }
     
@@ -285,10 +232,7 @@ class CloudKitManager {
         
         publicDatabase.fetchAllSubscriptionsWithCompletionHandler { (subscriptions, error) in
             
-            if let completion = completion {
-                
-                completion(subscriptions: subscriptions, error: error)
-            }
+            completion?(subscriptions: subscriptions, error: error)
         }
     }
     
@@ -296,23 +240,21 @@ class CloudKitManager {
         
         publicDatabase.fetchSubscriptionWithID(subscriptionID) { (subscription, error) in
             
-            if let completion = completion {
-                
-                completion(subscription: subscription, error: error)
-            }
+            completion?(subscription: subscription, error: error)
         }
     }
+    
     
     // MARK: - CloudKit Permissions
     
     func checkCloudKitAvailability() {
         
-        CKContainer.defaultContainer().accountStatusWithCompletionHandler() { (accountStatus: CKAccountStatus, error: NSError?) -> Void in
+        CKContainer.defaultContainer().accountStatusWithCompletionHandler() {
+            (accountStatus:CKAccountStatus, error:NSError?) -> Void in
             
             switch accountStatus {
-                
             case .Available:
-                print("CloudKit available.  Initializing full sync.")
+                print("CloudKit available. Initializing full sync.")
                 return
             default:
                 self.handleCloudKitUnavailable(accountStatus, error: error)
@@ -320,14 +262,12 @@ class CloudKitManager {
         }
     }
     
-    func handleCloudKitUnavailable(accountStatus: CKAccountStatus, error: NSError?) {
+    func handleCloudKitUnavailable(accountStatus: CKAccountStatus, error:NSError?) {
         
         var errorText = "Synchronization is disabled\n"
-        
         if let error = error {
-            
             print("handleCloudKitUnavailable ERROR: \(error)")
-            print("An error occurred: \(error.localizedDescription)")
+            print("An error occured: \(error.localizedDescription)")
             errorText += error.localizedDescription
         }
         
@@ -335,7 +275,7 @@ class CloudKitManager {
         case .Restricted:
             errorText += "iCloud is not available due to restrictions"
         case .NoAccount:
-            errorText += "There is no iCloud account setup.\nYou can set up iCloud in the Settings app."
+            errorText += "There is no CloudKit account setup.\nYou can setup iCloud in the Settings app."
         default:
             break
         }
@@ -345,27 +285,30 @@ class CloudKitManager {
     
     func displayCloudKitNotAvailableError(errorText: String) {
         
-        dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(),{
             
             let alertController = UIAlertController(title: "iCloud Synchronization Error", message: errorText, preferredStyle: .Alert)
-            let dismissAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+            
+            let dismissAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil);
+            
             alertController.addAction(dismissAction)
             
-            if let appDelegate = UIApplication.sharedApplication().delegate, appWindow = appDelegate.window!, rootViewController = appWindow.rootViewController {
-                
+            if let appDelegate = UIApplication.sharedApplication().delegate,
+                let appWindow = appDelegate.window!,
+                let rootViewController = appWindow.rootViewController {
                 rootViewController.presentViewController(alertController, animated: true, completion: nil)
             }
         })
     }
     
-    // MARK: - CloudKit Discoverability (see if CloudKit is available)
     
-    func requestDiscoverabilityPermission(completion: (() -> Void)?) {
+    // MARK: - CloudKit Discoverability
+    
+    func requestDiscoverabilityPermission() {
         
         CKContainer.defaultContainer().statusForApplicationPermission(.UserDiscoverability) { (permissionStatus, error) in
             
             if permissionStatus == .InitialState {
-                
                 CKContainer.defaultContainer().requestApplicationPermission(.UserDiscoverability, completionHandler: { (permissionStatus, error) in
                     
                     self.handleCloudKitPermissionStatus(permissionStatus, error: error)
@@ -377,27 +320,23 @@ class CloudKitManager {
         }
     }
     
-    func handleCloudKitPermissionStatus(permissionStatus: CKApplicationPermissionStatus, error: NSError?) {
+    func handleCloudKitPermissionStatus(permissionStatus: CKApplicationPermissionStatus, error:NSError?) {
         
         if permissionStatus == .Granted {
-            
-            print("User Discoverability permission granted.  User may proceed with full access.")
+            print("User Discoverability permission granted. User may proceed with full access.")
         } else {
-            
-            var errorText = "Synchronization is disabled.\n"
-            
+            var errorText = "Synchronization is disabled\n"
             if let error = error {
-                
                 print("handleCloudKitUnavailable ERROR: \(error)")
-                print("An error occurred: \(error.localizedDescription)")
+                print("An error occured: \(error.localizedDescription)")
                 errorText += error.localizedDescription
             }
             
             switch permissionStatus {
             case .Denied:
-                errorText += "You have denied User Discoverability permissions.  You may be unable to use certain features that require User Discoverability."
+                errorText += "You have denied User Discoverability permissions. You may be unable to use certain features that require User Discoverability."
             case .CouldNotComplete:
-                errorText += "Unable to verify User Discoverability permissions.  You may have a connectivity issue.  Pelase try again."
+                errorText += "Unable to verify User Discoverability permissions. You may have a connectivity issue. Please try again."
             default:
                 break
             }
@@ -408,17 +347,20 @@ class CloudKitManager {
     
     func displayCloudKitPermissionsNotGrantedError(errorText: String) {
         
-        dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(),{
             
             let alertController = UIAlertController(title: "CloudKit Permissions Error", message: errorText, preferredStyle: .Alert)
-            let dismissAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+            
+            let dismissAction = UIAlertAction(title: "Ok", style: .Cancel, handler: nil);
+            
             alertController.addAction(dismissAction)
             
-            if let appDelegate = UIApplication.sharedApplication().delegate, appWindow = appDelegate.window!, rootViewController = appWindow.rootViewController {
-                
+            if let appDelegate = UIApplication.sharedApplication().delegate,
+                let appWindow = appDelegate.window!,
+                let rootViewController = appWindow.rootViewController {
                 rootViewController.presentViewController(alertController, animated: true, completion: nil)
             }
         })
     }
-    
 }
+

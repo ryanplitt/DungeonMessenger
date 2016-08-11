@@ -13,18 +13,20 @@ class ConversationListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let user = NSUserDefaults.standardUserDefaults().objectForKey("currentUserRecordID") as? String {
-            guard user == UserController.sharedController.currentUserCustomUserID?.recordName
-                else {
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let controller = storyboard.instantiateViewControllerWithIdentifier("registrationVC")
-                    self.presentViewController(controller, animated: true, completion: nil)
-                    return
+        //        if let user = NSUserDefaults.standardUserDefaults().objectForKey("currentUserRecordID") as? String {
+        UserController.sharedController.fetchCurrentUser({ (success) in
+            if success != true {
+                self.setupRegistrationPage()
             }
-        }
-        UserController.sharedController.getCurrentUser()
-        UserController.sharedController.getContacts()
+        })
+    }
+    
+    
+    func setupRegistrationPage() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewControllerWithIdentifier("registrationVC")
+        self.presentViewController(controller, animated: true, completion: nil)
+        return
     }
     
     override func viewWillAppear(animated: Bool) {

@@ -33,7 +33,7 @@ class Message {
     let conversation: CKReference
     
     
-    init(text: String, timestamp: NSDate = NSDate(), sender: CKReference = CKReference(recordID: CloudKitManager.sharedController.currentUserRecordID, action: .DeleteSelf), conversation: CKReference){
+    init(text: String, timestamp: NSDate = NSDate(), sender: CKReference, conversation: CKReference){
         self.text = text
         self.timestamp = timestamp
         self.sender = sender

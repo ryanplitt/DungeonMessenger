@@ -15,26 +15,26 @@ class User {
     static let userNameKey = "UserName"
     static let raceNameKey = "RaceName"
     static let classNameKey = "ClassName"
-    static let recordIDKey = "RecordID"
+    static let referenceKey = "Reference"
     
     var userName: String
     var raceName: String
     var className: String
-    var recordID: CKReference
+    var reference: CKReference
     
-    init(userName: String, raceName: String, className: String, recordID: CKReference){
+    init(userName: String, raceName: String, className: String, reference: CKReference){
         self.userName = userName
         self.raceName = raceName
         self.className = className
-        self.recordID = recordID
+        self.reference = reference
     }
     
     convenience init?(ckRecord: CKRecord) {
         guard ckRecord.recordType == User.typeKey else { return nil }
         guard let userName = ckRecord[User.userNameKey] as? String,
         let raceName = ckRecord[User.raceNameKey] as? String,
-        let className = ckRecord[User.classNameKey] as? String else {return nil}
-        let reference = CKReference(recordID: ckRecord.recordID, action: .DeleteSelf)
-        self.init(userName: userName, raceName: raceName, className: className, recordID: reference)
+        let className = ckRecord[User.classNameKey] as? String,
+        let reference = ckRecord[User.referenceKey] as? CKReference else {return nil}
+        self.init(userName: userName, raceName: raceName, className: className, reference: reference)
     }
 }

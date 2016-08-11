@@ -25,9 +25,8 @@ class RegistrationViewController: UIViewController {
         guard let name = userNameField.text where userNameField.text?.characters.count > 0,
         let race = raceField.text where raceField.text?.characters.count > 0,
             let classField = classTextField.text where classTextField.text?.characters.count > 0 else {return}
-        UserController.sharedController.createUser(name, raceName: race, className: classField)
-        self.dismissViewControllerAnimated(true) { 
-            //
+        UserController.sharedController.createUser(name, raceName: race, className: classField) { 
+            self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
     

@@ -1,3 +1,4 @@
+
 //
 //  UserController.swift
 //  DungeonMessenger
@@ -14,8 +15,7 @@ class UserController {
     static let ckManager = CloudKitManager()
     static let sharedController = UserController()
     
-    var currentUserCustomUserID: CKRecordID?
-    var currentUserCloudKitReference: CKReference?
+    var currentUserReference: CKReference?
     
     init(){
         
@@ -45,31 +45,42 @@ class UserController {
         }
     }
     
-    func createUser(userName: String, raceName: String, className: String) {
-        let record = CKRecord(recordType: User.typeKey)
-        record.setValue(userName, forKey: User.userNameKey)
-        record.setValue(raceName, forKey: User.raceNameKey)
-        record.setValue(className, forKey: User.classNameKey)
+    func createUser(userName: String, raceName: String, className: String, completion: () -> Void) {
+        
         CloudKitManager.sharedController.fetchLoggedInUserRecord { (record, error) in
-            guard let record = record else {return}
-            let reference = CKReference(recordID: record.recordID, action: .DeleteSelf)
-            self.currentUserCustomUserID = reference.recordID
-            record.setValue(reference, forKey: User.recordIDKey)
+            guard let record = record else { return }
+            
+            let newRecord = CKRecord(recordType: User.typeKey)
+            newRecord.setValue(userName, forKey: User.userNameKey)
+            newRecord.setValue(raceName, forKey: User.raceNameKey)
+            newRecord.setValue(className, forKey: User.classNameKey)
+            newRecord.setValue(CKReference(recordID: record.recordID, action: .None), forKey: User.referenceKey)
+            CloudKitManager.sharedController.saveRecord(newRecord, completion: { (record, error) in
+                if error != nil {
+                    print("Error saving new user record to CloudKit: \(error?.localizedDescription)")
+                }
+                if record != nil {
+                    print("created new user successfully")
+                }
+                completion()
+            })
         }
-        NSUserDefaults.standardUserDefaults().setValue(record.recordID.recordName, forKey: "currentUserRecordID")
-        CloudKitManager.sharedController.saveRecord(record) { (record, error) in
-            //
-        }
+        completion()
     }
     
-    func getCurrentUser() {
-        guard let currentUserID = UserController.sharedController.currentUserCustomUserID else {return}
-        let predicate = NSPredicate(format: "recordID == %@", currentUserID)
-        CloudKitManager.sharedController.fetchRecordsWithType(User.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
-            //
-        }) { (records, error) in
-            guard let record = records?.first else {return}
-            UserController.sharedController.currentUserCloudKitReference = CKReference(recordID: record.recordID, action: .DeleteSelf)
+    func fetchCurrentUser(completion: (success: Bool) -> Void) {
+        CloudKitManager.sharedController.fetchLoggedInUserRecord { (record, error) in
+            guard let record = record else { completion(success: false);  return }
+            let reference = CKReference(recordID: record.recordID, action: .None)
+            
+            let predicate = NSPredicate(format: "reference == %@", reference)
+            CloudKitManager.sharedController.fetchRecordsWithType(User.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
+                //
+            }) { (records, error) in
+                guard let record = records?.first else { completion(success: false); return }
+                self.currentUserReference = CKReference(recordID: record.recordID, action: .None)
+                completion(success: true)
+            }
         }
     }
 }
