@@ -19,6 +19,7 @@ class ConversationListTableViewController: UITableViewController {
                 self.setupRegistrationPage()
             }
         })
+        UserController.sharedController.getContacts()
     }
     
     
