@@ -73,7 +73,7 @@ class UserController {
             guard let record = record else { completion(success: false);  return }
             let reference = CKReference(recordID: record.recordID, action: .None)
             
-            let predicate = NSPredicate(format: "reference == %@", reference)
+            let predicate = NSPredicate(format: "Reference == %@", reference)
             CloudKitManager.sharedController.fetchRecordsWithType(User.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
                 //
             }) { (records, error) in
