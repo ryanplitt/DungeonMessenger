@@ -13,16 +13,33 @@ class ConversationController {
     
     static let sharedController = ConversationController()
     
+    // MARK: - Conversation List Variables
+    
     var conversations: [Conversation] = []
     
-    func addNewConversation(users: [CKReference]) {
+    // MARK: - Conversation Detail Variables
+    
+    var currentConversationDetailReference: CKReference?
+    var messagesInConversation: [Message] = []
+    
+    
+    
+    // MARK: - Conversation List Functions
+    
+    func addNewConversation(users: [CKReference],completion: (() -> Void)?) {
         // TODO: GUARD TO MAKE SURE THERE ISN"T ALREADY A CONVERSATION
         let conversation = Conversation(users: users)
         conversations.append(conversation)
         CloudKitManager.sharedController.saveRecord(conversation.ckRecord) { (record, error) in
-            guard error != nil else {
+            if error != nil {
                 print("there was a problem saving the new conversation")
-                return
+            }
+            if let record = record  {
+                print("You suck")
+            self.currentConversationDetailReference = CKReference(recordID: record.recordID, action: .None)
+                if let completion = completion {
+                    completion()
+                }
             }
         }
     }
@@ -47,4 +64,21 @@ class ConversationController {
 //        whateveer.users.contains(<#T##element: CKReference##CKReference#>)
     }
     
+    // MARK: - Conversation Detail Functions
+    
+    func addMessageToConversation(message: String){
+        guard let currentUserReference = UserController.sharedController.currentUserReference else {
+            print("There was a problem getting the Current User info or it was nil")
+            return
+        }
+        let message = Message(text: message, sender: currentUserReference, conversation: ConversationController.sharedController.currentConversationDetailReference!)
+        CloudKitManager.sharedController.saveRecord(message.ckRecord) { (record, error) in
+            print("Message Saved In ICloud")
+        }
+    }
+    
+    func loadMessagesToConversationDetail(conversation: Conversation){
+//        let message = Message(text: "Hey", sender: UserController.sharedController.currentUserReference!, conversation: CKReference(recordID: conversation.ckRecord.recordID, action: .None)
+//        let predicate = NSPredicate(format: "ALL ", <#T##args: CVarArgType...##CVarArgType#>)
+    }
 }

@@ -17,15 +17,13 @@ class UserController {
     
     var currentUserReference: CKReference?
     
-    init(){
-        
-    }
-    
     var usersInConversation: [User]? = [] {
         didSet {
             print(usersInConversation?.count)
         }
     }
+    
+    var usersInConversationReferences: [CKReference]? = []
     
     var contactsList: [User] = [] {
         didSet {
@@ -82,5 +80,15 @@ class UserController {
                 completion(success: true)
             }
         }
+    }
+    
+    func loadUsersInConversationReferences(completion: (() -> Void)?) {
+        var userReferences: [CKReference] = []
+        guard let users = UserController.sharedController.usersInConversation else {return}
+        for user in users {
+            userReferences.append(user.reference)
+        }
+        self.usersInConversationReferences = userReferences
+        completion?()
     }
 }

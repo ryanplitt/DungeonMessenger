@@ -61,23 +61,12 @@ class ConversationListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("conversationCell", forIndexPath: indexPath)
         
-        let conversations = ConversationController.sharedController.conversations
-        let references = conversations[indexPath.row].users
-        var users: [User] = []
-        for reference in references {
-            CloudKitManager.sharedController.fetchRecordWithID(reference.recordID, completion: { (record, error) in
-                guard let record = record, user = User(ckRecord: record) else {return}
-                
-                users.append(user)
-            })
-        }
         
         cell.textLabel?.text = users[indexPath.row].userName
         cell.detailTextLabel?.text = "\(users[indexPath.row].raceName) \(users[indexPath.row].className)"
         
         return cell
     }
-    
     
     /*
      // MARK: - Navigation
@@ -90,6 +79,5 @@ class ConversationListTableViewController: UITableViewController {
      */
     
     @IBAction func unwindToConversationList(segue: UIStoryboardSegue) {
-        
     }
 }
