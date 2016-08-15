@@ -2,7 +2,7 @@
 //  ContactsListTableViewController.swift
 //  DungeonMessenger
 //
-//  Created by Ryan Plitt on 8/9/16.
+//  Created by Ryan Plitt on 8/15/16.
 //  Copyright © 2016 Ryan Plitt. All rights reserved.
 //
 
@@ -12,36 +12,40 @@ class ContactsListTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(reloadTV), name: "contactsUpdated", object: nil)
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
 
-    @IBAction func CancelBarButton(sender: AnyObject) {
-        UserController.sharedController.usersInConversation = []
-        performSegueWithIdentifier("unwindToConversationList", sender: self)
-    }
-    
-    func reloadTV() {
-        self.tableView.reloadData()
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 0
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return UserController.sharedController.contactsList.count
+        return 0
     }
 
+    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("contactCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
-        cell.textLabel?.text = UserController.sharedController.contactsList[indexPath.row].userName
-        
+        // Configure the cell...
+
         return cell
     }
-//    
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        let user = UserController.sharedController.contactsList[indexPath.row]
-//    }
+    */
 
     /*
     // Override to support conditional editing of the table view.
@@ -78,15 +82,14 @@ class ContactsListTableViewController: UITableViewController {
     }
     */
 
+    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        guard segue.identifier == "toNewMessage" else {return}
-        guard let newMessageTVC = segue.destinationViewController as? ConversationDetailTableViewController, let indexPath = tableView.indexPathForSelectedRow else {return}
-        let user = UserController.sharedController.contactsList[indexPath.row]
-        UserController.sharedController.usersInConversation?.append(user)
     }
+    */
+
 }

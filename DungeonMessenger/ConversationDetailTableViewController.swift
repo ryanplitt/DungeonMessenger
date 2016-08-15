@@ -2,30 +2,17 @@
 //  ConversationDetailTableViewController.swift
 //  DungeonMessenger
 //
-//  Created by Ryan Plitt on 8/9/16.
+//  Created by Ryan Plitt on 8/15/16.
 //  Copyright © 2016 Ryan Plitt. All rights reserved.
 //
 
 import UIKit
 
 class ConversationDetailTableViewController: UITableViewController {
-    
-    @IBOutlet weak var listOfUsersArrayTextField: UITextField!
-    @IBOutlet weak var textInputTextField: UITextField!
-    @IBOutlet weak var SendButton: UIButton!
-    
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let users = UserController.sharedController.usersInConversation{
-            let userNameArray = users.flatMap({$0.userName})
-            let stringOfNames = userNameArray.joinWithSeparator(", ")
-            listOfUsersArrayTextField.text = stringOfNames
-        }
-        self.navigationItem.hidesBackButton = true
-        reloadInputViews()
-        tableView.reloadData()
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -37,18 +24,6 @@ class ConversationDetailTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    @IBAction func CancelButtonTapped(sender: AnyObject) {
-        UserController.sharedController.usersInConversation = []
-        performSegueWithIdentifier("unwindToConversationList", sender: self)
-    }
-    @IBAction func SendButtonTapped(sender: AnyObject) {
-    }
-    
-    
-    
-    
 
     // MARK: - Table view data source
 

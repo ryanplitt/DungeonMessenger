@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FBAC10F01D620A7E0008FCF3 /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */; };
+		FBAC10F21D620AAA0008FCF3 /* ConversationDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F11D620AAA0008FCF3 /* ConversationDetailTableViewController.swift */; };
+		FBAC10F41D620AE00008FCF3 /* ContactsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */; };
+		FBAC10F61D620B710008FCF3 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */; };
+		FBAC10F81D620B830008FCF3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F71D620B830008FCF3 /* SettingsViewController.swift */; };
 		FBB302EA1D5A5B790050470E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB302E91D5A5B790050470E /* AppDelegate.swift */; };
 		FBB302EF1D5A5B790050470E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FBB302ED1D5A5B790050470E /* Main.storyboard */; };
 		FBB302F21D5A5B790050470E /* DungeonMessenger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FBB302F01D5A5B790050470E /* DungeonMessenger.xcdatamodeld */; };
@@ -18,15 +23,15 @@
 		FBB303061D5A5C020050470E /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB303051D5A5C020050470E /* CloudKitManager.swift */; };
 		FBB3030D1D5A7D660050470E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB3030C1D5A7D660050470E /* User.swift */; };
 		FBB3030F1D5A7EAF0050470E /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB3030E1D5A7EAF0050470E /* UserController.swift */; };
-		FBB303121D5A84740050470E /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB303111D5A84740050470E /* ConversationListTableViewController.swift */; };
-		FBB303141D5A848B0050470E /* ConversationDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB303131D5A848B0050470E /* ConversationDetailTableViewController.swift */; };
-		FBB303161D5A84E50050470E /* ContactsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB303151D5A84E50050470E /* ContactsListTableViewController.swift */; };
 		FBB303191D5A89830050470E /* ConversationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB303181D5A89830050470E /* ConversationController.swift */; };
-		FBB3031D1D5B731A0050470E /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB3031C1D5B731A0050470E /* RegistrationViewController.swift */; };
-		FBB3031F1D5B8C9F0050470E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB3031E1D5B8C9F0050470E /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewController.swift; sourceTree = "<group>"; };
+		FBAC10F11D620AAA0008FCF3 /* ConversationDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailTableViewController.swift; sourceTree = "<group>"; };
+		FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsListTableViewController.swift; sourceTree = "<group>"; };
+		FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		FBAC10F71D620B830008FCF3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		FBB302E61D5A5B790050470E /* DungeonMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DungeonMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBB302E91D5A5B790050470E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FBB302EE1D5A5B790050470E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -41,12 +46,7 @@
 		FBB303051D5A5C020050470E /* CloudKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		FBB3030C1D5A7D660050470E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FBB3030E1D5A7EAF0050470E /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
-		FBB303111D5A84740050470E /* ConversationListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewController.swift; sourceTree = "<group>"; };
-		FBB303131D5A848B0050470E /* ConversationDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailTableViewController.swift; sourceTree = "<group>"; };
-		FBB303151D5A84E50050470E /* ContactsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsListTableViewController.swift; sourceTree = "<group>"; };
 		FBB303181D5A89830050470E /* ConversationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationController.swift; sourceTree = "<group>"; };
-		FBB3031C1D5B731A0050470E /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
-		FBB3031E1D5B8C9F0050470E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,11 +118,11 @@
 		FBB303171D5A874A0050470E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FBB303111D5A84740050470E /* ConversationListTableViewController.swift */,
-				FBB303131D5A848B0050470E /* ConversationDetailTableViewController.swift */,
-				FBB303151D5A84E50050470E /* ContactsListTableViewController.swift */,
-				FBB3031C1D5B731A0050470E /* RegistrationViewController.swift */,
-				FBB3031E1D5B8C9F0050470E /* SettingsViewController.swift */,
+				FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */,
+				FBAC10F11D620AAA0008FCF3 /* ConversationDetailTableViewController.swift */,
+				FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */,
+				FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */,
+				FBAC10F71D620B830008FCF3 /* SettingsViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -205,17 +205,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBB303021D5A5BE90050470E /* Conversation.swift in Sources */,
+				FBAC10F21D620AAA0008FCF3 /* ConversationDetailTableViewController.swift in Sources */,
 				FBB303041D5A5BF20050470E /* Message.swift in Sources */,
-				FBB303121D5A84740050470E /* ConversationListTableViewController.swift in Sources */,
 				FBB3030D1D5A7D660050470E /* User.swift in Sources */,
+				FBAC10F61D620B710008FCF3 /* RegistrationViewController.swift in Sources */,
+				FBAC10F41D620AE00008FCF3 /* ContactsListTableViewController.swift in Sources */,
 				FBB302F21D5A5B790050470E /* DungeonMessenger.xcdatamodeld in Sources */,
 				FBB3030F1D5A7EAF0050470E /* UserController.swift in Sources */,
-				FBB3031D1D5B731A0050470E /* RegistrationViewController.swift in Sources */,
+				FBAC10F01D620A7E0008FCF3 /* ConversationListTableViewController.swift in Sources */,
 				FBB303191D5A89830050470E /* ConversationController.swift in Sources */,
+				FBAC10F81D620B830008FCF3 /* SettingsViewController.swift in Sources */,
 				FBB302EA1D5A5B790050470E /* AppDelegate.swift in Sources */,
-				FBB303141D5A848B0050470E /* ConversationDetailTableViewController.swift in Sources */,
-				FBB3031F1D5B8C9F0050470E /* SettingsViewController.swift in Sources */,
-				FBB303161D5A84E50050470E /* ContactsListTableViewController.swift in Sources */,
 				FBB303061D5A5C020050470E /* CloudKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +368,7 @@
 				FBB302FD1D5A5B790050470E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
