@@ -12,18 +12,29 @@ class ConversationListTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        UserController.sharedController.setCurrentUser { 
+            UserController.sharedController.ObtainActiveLoggedInUserReference({ (success) in
+                if success != true {
+                    print("it was not a success. Opening Registration page")
+                    self.showRegistrationViewController()
+                }
+                if success == true {
+                    print("It seems to be working")
+                }
+                UserController.sharedController.getContacts()
+            })
+        }
+    }
+    
+    
+    func showRegistrationViewController(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let registrationVC = storyboard.instantiateViewControllerWithIdentifier("registrationVC")
+        self.presentViewController(registrationVC, animated: true) { 
+            //
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     // MARK: - Table view data source
 

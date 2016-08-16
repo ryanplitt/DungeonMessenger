@@ -11,4 +11,14 @@ import CloudKit
 
 class Conversation {
 
+    let users: [CKReference]
+    let timestamp: NSDate
+    
+    init(users: [CKReference], timestamp: NSDate){
+        self.users = users
+        self.timestamp = timestamp
+        
+    }
+    
+    
 }
