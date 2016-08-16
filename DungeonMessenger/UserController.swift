@@ -14,12 +14,23 @@ class UserController {
     
     // MARK: - Conversation Variables
     var loggedInUserICloudRecord: CKRecord?
+    var loggedInUserModelObject: User? {
+        guard let loggedInUserICloudRecord = loggedInUserICloudRecord else {
+            print("There was no logged in user")
+            return nil
+        }
+        return User(ckRecord: loggedInUserICloudRecord)
+    }
     var loggedInUserReference: CKReference?
     var contacts: [User] = []
     
     
     // MARK: - Message Variables
-    var usersInMessage: [User] = []
+    var usersInMessage: [User] = [] {
+        didSet{
+            print(usersInMessage.count)
+        }
+    }
 
     static let sharedController = UserController()
     

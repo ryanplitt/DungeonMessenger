@@ -79,16 +79,16 @@
         <scene sceneID="pf1-3p-nGF">
             <objects>
                 <tableViewController id="6aG-WW-i8t" customClass="ConversationListTableViewController" customModule="DungeonMessenger" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="CW7-Tk-LIt">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="CW7-Tk-LIt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="DYg-hk-4WX">
-                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="conversationCell" rowHeight="80" id="DYg-hk-4WX">
+                                <rect key="frame" x="0.0" y="92" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DYg-hk-4WX" id="Iv7-GB-X1p">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -120,7 +120,7 @@
         <!--New Message-->
         <scene sceneID="Or2-2O-pJJ">
             <objects>
-                <viewController id="aPc-ZX-IMg" customClass="ConversationDetailTableViewController" customModule="DungeonMessenger" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="aPc-ZX-IMg" customClass="ConversationDetailViewController" customModule="DungeonMessenger" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ARk-XG-KyY"/>
                         <viewControllerLayoutGuide type="bottom" id="0Qn-Pv-peY"/>
@@ -144,8 +144,8 @@
                                     <barButtonItem title="Item" id="5f2-1r-GeC"/>
                                 </items>
                             </toolbar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YyJ-W4-6qA">
-                                <rect key="frame" x="-4" y="64" width="383" height="559"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YyJ-W4-6qA">
+                                <rect key="frame" x="-4" y="20" width="383" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="1gz-YN-tTL">
                                     <rect key="frame" x="0.0" y="0.0" width="383" height="50"/>
@@ -167,6 +167,7 @@
                                                     </constraints>
                                                     <state key="normal" title="Add User" image="Plus"/>
                                                     <connections>
+                                                        <action selector="addNewUserToConversationButtonTapped:" destination="aPc-ZX-IMg" eventType="touchUpInside" id="kvj-qs-Xgp"/>
                                                         <segue destination="aiy-0s-Bas" kind="presentation" id="csP-mK-lfK"/>
                                                     </connections>
                                                 </button>
@@ -181,6 +182,16 @@
                                         <constraint firstAttribute="bottom" secondItem="Hn7-30-rjf" secondAttribute="bottom" id="xAD-io-aZV"/>
                                     </constraints>
                                 </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="textCell" id="zhg-GY-4ML">
+                                        <rect key="frame" x="0.0" y="78" width="383" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhg-GY-4ML" id="z2D-IV-7fZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="aPc-ZX-IMg" id="l57-qV-MLr"/>
                                     <outlet property="delegate" destination="aPc-ZX-IMg" id="ocx-ov-HIG"/>
@@ -198,7 +209,16 @@
                             <constraint firstItem="0Qn-Pv-peY" firstAttribute="top" secondItem="DM5-KT-lSp" secondAttribute="bottom" id="zNh-G1-oKq"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="New Message" id="Aeg-vr-g6g"/>
+                    <navigationItem key="navigationItem" title="New Message" id="Aeg-vr-g6g">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Jk2-Ag-l9r">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="aPc-ZX-IMg" id="nGH-Lp-wIV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="usersInMessageTextField" destination="6vV-og-QP3" id="hRu-15-zcP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tHM-s6-cKZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -237,7 +257,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="aPc-ZX-IMg" kind="show" id="NzW-76-0TM"/>
+                                    <segue destination="aPc-ZX-IMg" kind="show" identifier="toNewMessage" id="NzW-76-0TM"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -246,8 +266,13 @@
                             <outlet property="delegate" destination="Rjq-1k-PAh" id="TYR-5V-XyX"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Contacts" id="bxo-pw-fso"/>
+                    <navigationItem key="navigationItem" title="Contacts" id="bxo-pw-fso">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="qRS-52-crI"/>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="tableView" destination="ifG-Hi-AqT" id="BpD-ml-14d"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T02-bD-L2A" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -328,7 +353,7 @@
         <image name="Settings" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="0mt-RY-Hpu"/>
+        <segue reference="csP-mK-lfK"/>
         <segue reference="NzW-76-0TM"/>
     </inferredMetricsTieBreakers>
 </document>

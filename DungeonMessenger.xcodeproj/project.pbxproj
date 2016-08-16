@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FB8E42B11D635DE400E2ECDC /* ConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8E42B01D635DE400E2ECDC /* ConversationDetailViewController.swift */; };
 		FBAC10F01D620A7E0008FCF3 /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */; };
-		FBAC10F21D620AAA0008FCF3 /* ConversationDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F11D620AAA0008FCF3 /* ConversationDetailTableViewController.swift */; };
 		FBAC10F41D620AE00008FCF3 /* ContactsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */; };
 		FBAC10F61D620B710008FCF3 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */; };
 		FBAC10F81D620B830008FCF3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F71D620B830008FCF3 /* SettingsViewController.swift */; };
@@ -27,8 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FB8E42B01D635DE400E2ECDC /* ConversationDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailViewController.swift; sourceTree = "<group>"; };
 		FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewController.swift; sourceTree = "<group>"; };
-		FBAC10F11D620AAA0008FCF3 /* ConversationDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailTableViewController.swift; sourceTree = "<group>"; };
 		FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsListTableViewController.swift; sourceTree = "<group>"; };
 		FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		FBAC10F71D620B830008FCF3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */,
-				FBAC10F11D620AAA0008FCF3 /* ConversationDetailTableViewController.swift */,
+				FB8E42B01D635DE400E2ECDC /* ConversationDetailViewController.swift */,
 				FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */,
 				FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */,
 				FBAC10F71D620B830008FCF3 /* SettingsViewController.swift */,
@@ -205,7 +205,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBB303021D5A5BE90050470E /* Conversation.swift in Sources */,
-				FBAC10F21D620AAA0008FCF3 /* ConversationDetailTableViewController.swift in Sources */,
 				FBB303041D5A5BF20050470E /* Message.swift in Sources */,
 				FBB3030D1D5A7D660050470E /* User.swift in Sources */,
 				FBAC10F61D620B710008FCF3 /* RegistrationViewController.swift in Sources */,
@@ -217,6 +216,7 @@
 				FBAC10F81D620B830008FCF3 /* SettingsViewController.swift in Sources */,
 				FBB302EA1D5A5B790050470E /* AppDelegate.swift in Sources */,
 				FBB303061D5A5C020050470E /* CloudKitManager.swift in Sources */,
+				FB8E42B11D635DE400E2ECDC /* ConversationDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
