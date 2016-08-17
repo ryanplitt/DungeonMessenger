@@ -182,7 +182,7 @@
                                         <rect key="frame" x="0.0" y="28" width="383" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhg-GY-4ML" id="z2D-IV-7fZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="383" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="69.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAS-qQ-1CU">
@@ -255,16 +255,11 @@
                             <constraint firstItem="0Qn-Pv-peY" firstAttribute="top" secondItem="DM5-KT-lSp" secondAttribute="bottom" id="zNh-G1-oKq"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="New Message" id="Aeg-vr-g6g">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Jk2-Ag-l9r">
-                            <connections>
-                                <action selector="cancelButtonTapped:" destination="aPc-ZX-IMg" id="nGH-Lp-wIV"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="New Message" id="Aeg-vr-g6g"/>
                     <connections>
                         <outlet property="tableViewOutlet" destination="YyJ-W4-6qA" id="kfw-Db-kzZ"/>
                         <outlet property="textMessageInputTextField" destination="Pxv-PH-dDQ" id="Wjc-Fn-9WR"/>
+                        <outlet property="usersAndButtonHeaderView" destination="1gz-YN-tTL" id="4h2-vW-PUT"/>
                         <outlet property="usersInMessageTextField" destination="6vV-og-QP3" id="hRu-15-zcP"/>
                     </connections>
                 </viewController>

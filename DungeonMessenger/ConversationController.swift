@@ -15,13 +15,19 @@ class ConversationController {
 
     // MARK: - Conversation variables
     var conversations: [Conversation] = []
-    var currentConversation: Conversation?
+    var currentConversation: Conversation? {
+        didSet{
+            print("The Conversation has been set")
+        }
+    }
     var currentConversationReference: CKReference? {
         didSet{
             print("The current ConversationReference has been set")
         }
     }
-    let ckReferencesOfUsersInConversation = UserController.sharedController.usersInMessage.flatMap({$0.reference})
+    var ckReferencesOfUsersInConversation: [CKReference] {
+        return UserController.sharedController.usersInMessage.flatMap({$0.reference})
+    }
     
     
     // MARK: - Message variables
@@ -52,9 +58,10 @@ class ConversationController {
     
     func setCurrentConversationReference(completion: () -> Void) {
         
-        let predicate = NSPredicate(format: "Users == %@", self.ckReferencesOfUsersInConversation)
+//        let predicate = NSPredicate(format: "Users == %@", self.ckReferencesOfUsersInConversation)
+        let predicate = NSPredicate(value: true)
         CloudKitManager.sharedController.fetchRecordsWithType(Conversation.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
-            //
+            print("There was a conversation record found!")
             }) { (records, error) in
                 guard let records = records else {
                     print("There was no matching Conversation with the selected Users")
@@ -62,17 +69,16 @@ class ConversationController {
                     return
                 }
                 guard let conversationRecord = records.first else {
-                    print("There was no record of the Conversation. Error")
+                    print("The record returned for the Conversation w/ users was empty.")
                     completion()
                     return
                 }
                 self.currentConversationReference = CKReference(record: conversationRecord, action: .None)
-                self.currentConversation = Conversation(ckRecord: conversationRecord)
+                completion()
         }
     }
     
     func fetchUsersConversations(completion: () -> Void){
-        //        let predicate = NSPredicate(format: "Users CONTAINS %@", UserController.sharedController.loggedInUserCustomModelReference!)
         CloudKitManager.sharedController.fetchRecordsWithType(Conversation.typeKey, predicate: NSPredicate(value: true), recordFetchedBlock: { (record) in
             //
         }) { (records, error) in
@@ -82,12 +88,12 @@ class ConversationController {
             self.getUserNamesFromConversation(self.conversations, completion: {
                 completion()
             })
+            completion()
         }
     }
     
     func getUserNamesFromConversation(conversations: [Conversation], completion: () -> Void){
         for conversation in conversations {
-            var arrayOfReferences: [CKReference] = []
             for user in conversation.users {
                 let predicate = NSPredicate(format: "ReferenceKey == %@", user.recordID)
                 CloudKitManager.sharedController.fetchRecordsWithType(User.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
@@ -127,16 +133,19 @@ class ConversationController {
     }
     
     
-    
-    
-    
-    
-//    func updateDetailViewWithMessages(conversation: Conversation) {
-//        let ckReferencesOfUsersInConversation = UserController.sharedController.usersInMessage.flatMap({$0.reference})
-//        let predicate = NSPredicate(format: "", <#T##args: CVarArgType...##CVarArgType#>)
-//        CloudKitManager.sharedController.fetchRecordsWithType(<#T##type: String##String#>, predicate: <#T##NSPredicate#>, recordFetchedBlock: <#T##((record: CKRecord) -> Void)?##((record: CKRecord) -> Void)?##(record: CKRecord) -> Void#>, completion: <#T##((records: [CKRecord]?, error: NSError?) -> Void)?##((records: [CKRecord]?, error: NSError?) -> Void)?##(records: [CKRecord]?, error: NSError?) -> Void#>)
-//    }
-    
+    func loadMessagesFromConversation(conversationReference: CKReference, completion: () -> Void){
+        let predicate = NSPredicate(format: "ConversationKey == %@", conversationReference)
+        CloudKitManager.sharedController.fetchRecordsWithType(Message.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
+            //completion
+        }) { (records, error) in
+            guard let records = records else {
+                print("There was no messages")
+                completion()
+                return
+            }
+            self.messagesInConversation = records.flatMap({Message(ckRecord: $0)})
+        }
+    }
     
     
     

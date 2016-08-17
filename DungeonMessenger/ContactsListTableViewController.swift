@@ -70,12 +70,18 @@ class ContactsListTableViewController: UITableViewController {
      */
     
     // MARK: - Navigation
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         guard segue.identifier == "toNewMessage" else {return}
         guard let indexPath = tableView.indexPathForSelectedRow else {return}
         let contact = UserController.sharedController.contacts[indexPath.row]
         UserController.sharedController.usersInMessage.append(contact)
+        guard let detailVC = segue.destinationViewController as? ConversationDetailViewController else {return}
+        detailVC.navigationItem.backBarButtonItem?.enabled = false
+        let cancelBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Done, target: nil, action: nil)
+        detailVC.navigationItem.leftBarButtonItem = cancelBarButtonItem
+        detailVC.transitionFromExisting = false
     }
     
 }

@@ -55,11 +55,13 @@ class UserController {
     func setCurrentUser(completion: (() -> Void)){
         CloudKitManager.sharedController.fetchLoggedInUserRecord { (record, error) in
             guard let record = record else {
+                print(error?.localizedDescription)
                 completion()
                 return
             }
-            self.loggedInUserICloudRecord = record
             self.loggedInUserAppleReference = CKReference(recordID: record.recordID, action: .None)
+            self.loggedInUserICloudRecord = record
+            
             completion()
         }
     }
@@ -67,7 +69,7 @@ class UserController {
     
     func ObtainActiveLoggedInUserReference(completion: ((success: Bool) -> Void)?) {
         guard let loggedInUserReference = self.loggedInUserAppleReference else {
-            print("No User Reference.")
+            print("No User Reference. ")
             completion?(success: false)
             return
         }
@@ -85,7 +87,6 @@ class UserController {
                 completion?(success: false)
                 return
             }
-            self.loggedInUserICloudRecord = userRecord
             self.loggedInUserCustomModelReference = CKReference(recordID: userRecord.recordID, action: .None)
             completion?(success: true)
         }

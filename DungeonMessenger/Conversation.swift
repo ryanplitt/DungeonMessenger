@@ -14,16 +14,18 @@ class Conversation {
     static let typeKey = "Conversation"
     static let usersKey = "Users"
     static let timestamp = "Timestamp"
+    static let cloudKitReferenceKey = "CloudKitReferenceKey"
     
 
     let users: [CKReference]
     var userz: [User] = []
     let timestamp: NSDate
+    let cloudKitReference: NSUUID
     
-    init(users: [CKReference], timestamp: NSDate){
+    init(users: [CKReference], timestamp: NSDate, cloudKitReference: NSUUID = NSUUID()){
         self.users = users
         self.timestamp = timestamp
-        
+        self.cloudKitReference = cloudKitReference
     }
     
     var ckRecord: CKRecord {
@@ -42,5 +44,4 @@ class Conversation {
         
         self.init(users: users, timestamp: timestamp)
     }
-    
 }

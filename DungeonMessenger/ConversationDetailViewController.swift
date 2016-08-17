@@ -9,29 +9,54 @@
 import UIKit
 
 class ConversationDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     @IBOutlet weak var usersInMessageTextField: UITextField!
     @IBOutlet weak var textMessageInputTextField: UITextField!
-
+    @IBOutlet weak var usersAndButtonHeaderView: UIView!
+    
     @IBOutlet weak var tableViewOutlet: UITableView!
+    
+    var transitionFromExisting: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.backBarButtonItem?.enabled = false
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(updateTableView), name: "messagesUpdated", object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
-        let userNames = UserController.sharedController.usersInMessage.flatMap({$0.userName})
-        usersInMessageTextField.text = userNames.joinWithSeparator(", ")
-        ConversationController.sharedController.setCurrentConversationReference { 
-            self.updateTableView()
+        dispatch_async(dispatch_get_main_queue()) {
+            if self.transitionFromExisting == true {
+                ConversationController.sharedController.setCurrentConversationReference {
+                    self.updateViewControllerForExistingConversation()
+                    guard let conversation = ConversationController.sharedController.currentConversation else {return}
+                    let userNames = conversation.userz.flatMap({$0.userName})
+                    self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
+                }
+            } else {
+                ConversationController.sharedController.setCurrentConversationReference {
+                    let userNames = UserController.sharedController.usersInMessage.flatMap({$0.userName})
+                    self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
+                    self.updateTableView()
+                }
+            }
+            guard ConversationController.sharedController.currentConversationReference != nil else {
+                print("The conversation reference was not set")
+                return
+            }
+            ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) {
+                self.tableViewOutlet.reloadData()
+            }
         }
     }
     
     func updateTableView(){
         tableViewOutlet.reloadData()
+    }
+    
+    func updateViewControllerForExistingConversation(){
+        self.usersAndButtonHeaderView.hidden = false
+        self.tableViewOutlet.sizeToFit()
     }
     
     @IBAction func addNewUserToConversationButtonTapped(sender: AnyObject) {

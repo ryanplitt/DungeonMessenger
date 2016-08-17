@@ -82,19 +82,31 @@ class ConversationListTableViewController: UITableViewController {
     */
 
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
+     // Override to support conditional rearranging of the table view.
+     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        guard let indexPath = tableView.indexPathForSelectedRow else {return}
+        guard let indexPath = self.tableView.indexPathForSelectedRow else {return}
         ConversationController.sharedController.currentConversation = ConversationController.sharedController.conversations[indexPath.row]
+        ConversationController.sharedController.setCurrentConversationReference {
+            guard let usersInConversation = ConversationController.sharedController.currentConversation?.userz else {
+                print("the users in the conversation were not loaded properly.")
+                return
+            }
+            UserController.sharedController.usersInMessage = usersInConversation
+            guard let detailVC = segue.destinationViewController as? ConversationDetailViewController else {
+                print("Couldn't cast as destination view controller")
+                return
+            }
+            detailVC.navigationItem.title = "User(s) name(s)"
+            detailVC.transitionFromExisting = true
+        }
     }
-
 }
