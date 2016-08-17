@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FB8E42B11D635DE400E2ECDC /* ConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8E42B01D635DE400E2ECDC /* ConversationDetailViewController.swift */; };
+		FB8E42E51D64A8BB00E2ECDC /* TextMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8E42E41D64A8BB00E2ECDC /* TextMessageTableViewCell.swift */; };
 		FBAC10F01D620A7E0008FCF3 /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */; };
 		FBAC10F41D620AE00008FCF3 /* ContactsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */; };
 		FBAC10F61D620B710008FCF3 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		FB8E42B01D635DE400E2ECDC /* ConversationDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailViewController.swift; sourceTree = "<group>"; };
+		FB8E42E41D64A8BB00E2ECDC /* TextMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextMessageTableViewCell.swift; sourceTree = "<group>"; };
 		FBAC10EF1D620A7E0008FCF3 /* ConversationListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewController.swift; sourceTree = "<group>"; };
 		FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsListTableViewController.swift; sourceTree = "<group>"; };
 		FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				FBAC10F31D620AE00008FCF3 /* ContactsListTableViewController.swift */,
 				FBAC10F51D620B710008FCF3 /* RegistrationViewController.swift */,
 				FBAC10F71D620B830008FCF3 /* SettingsViewController.swift */,
+				FB8E42E41D64A8BB00E2ECDC /* TextMessageTableViewCell.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB8E42E51D64A8BB00E2ECDC /* TextMessageTableViewCell.swift in Sources */,
 				FBB303021D5A5BE90050470E /* Conversation.swift in Sources */,
 				FBB303041D5A5BF20050470E /* Message.swift in Sources */,
 				FBB3030D1D5A7D660050470E /* User.swift in Sources */,

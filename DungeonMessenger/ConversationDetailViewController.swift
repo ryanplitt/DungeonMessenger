@@ -11,16 +11,27 @@ import UIKit
 class ConversationDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var usersInMessageTextField: UITextField!
+    @IBOutlet weak var textMessageInputTextField: UITextField!
 
+    @IBOutlet weak var tableViewOutlet: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.backBarButtonItem?.enabled = false
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(updateTableView), name: "messagesUpdated", object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
         let userNames = UserController.sharedController.usersInMessage.flatMap({$0.userName})
         usersInMessageTextField.text = userNames.joinWithSeparator(", ")
+        ConversationController.sharedController.setCurrentConversationReference { 
+            self.updateTableView()
+        }
+    }
+    
+    func updateTableView(){
+        tableViewOutlet.reloadData()
     }
     
     @IBAction func addNewUserToConversationButtonTapped(sender: AnyObject) {
@@ -31,18 +42,32 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
         
     }
     
+    @IBAction func sendButtonTapped(sender: AnyObject) {
+        if ConversationController.sharedController.currentConversationReference == nil {
+            ConversationController.sharedController.createNewConversation(ConversationController.sharedController.ckReferencesOfUsersInConversation, completion: { 
+                if let messageText = self.textMessageInputTextField.text {
+                    ConversationController.sharedController.sendNewMessage(messageText)
+                    self.tableViewOutlet.reloadData()
+                }
+            })
+        } else if let messageText = textMessageInputTextField.text {
+        ConversationController.sharedController.sendNewMessage(messageText)
+            self.tableViewOutlet.reloadData()
+        }
+    }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return ConversationController.sharedController.messagesInConversation.count
     }
     
      func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-     let cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath)
+     let cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath) as? TextMessageTableViewCell
      
-     // Configure the cell...
+    cell?.senderLabel.text = ConversationController.sharedController.messagesInConversation[indexPath.row].sender.description
+        cell?.textMessageLabel.text = ConversationController.sharedController.messagesInConversation[indexPath.row].text
      
-     return cell
+     return cell ?? UITableViewCell()
      }
 
     // MARK: - Navigation

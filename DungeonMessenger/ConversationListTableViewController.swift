@@ -12,16 +12,18 @@ class ConversationListTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        UserController.sharedController.setCurrentUser { 
+        UserController.sharedController.setCurrentUser {
             UserController.sharedController.ObtainActiveLoggedInUserReference({ (success) in
                 if success != true {
                     print("it was not a success. Opening Registration page")
                     self.showRegistrationViewController()
-                }
-                if success == true {
+                } else {
                     print("It seems to be working")
                 }
-                UserController.sharedController.getContacts()
+                ConversationController.sharedController.fetchUsersConversations({
+                    self.tableView.reloadData()
+                    UserController.sharedController.getContacts()
+                })
             })
         }
     }
@@ -38,25 +40,19 @@ class ConversationListTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return ConversationController.sharedController.conversations.count
     }
 
-    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("conversationCell", forIndexPath: indexPath)
 
-        // Configure the cell...
-
+        let userz = ConversationController.sharedController.conversations[indexPath.row].userz
+        let nameOfUserz = userz.flatMap({$0.userName})
+        cell.textLabel?.text = nameOfUserz.joinWithSeparator(", ")
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
@@ -93,14 +89,12 @@ class ConversationListTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        guard let indexPath = tableView.indexPathForSelectedRow else {return}
+        ConversationController.sharedController.currentConversation = ConversationController.sharedController.conversations[indexPath.row]
     }
-    */
 
 }

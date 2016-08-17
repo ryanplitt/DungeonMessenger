@@ -21,7 +21,8 @@ class UserController {
         }
         return User(ckRecord: loggedInUserICloudRecord)
     }
-    var loggedInUserReference: CKReference?
+    var loggedInUserAppleReference: CKReference?
+    var loggedInUserCustomModelReference: CKReference?
     var contacts: [User] = []
     
     
@@ -58,14 +59,14 @@ class UserController {
                 return
             }
             self.loggedInUserICloudRecord = record
-            self.loggedInUserReference = CKReference(recordID: record.recordID, action: .None)
+            self.loggedInUserAppleReference = CKReference(recordID: record.recordID, action: .None)
             completion()
         }
     }
     
     
     func ObtainActiveLoggedInUserReference(completion: ((success: Bool) -> Void)?) {
-        guard let loggedInUserReference = self.loggedInUserReference else {
+        guard let loggedInUserReference = self.loggedInUserAppleReference else {
             print("No User Reference.")
             completion?(success: false)
             return
@@ -85,7 +86,7 @@ class UserController {
                 return
             }
             self.loggedInUserICloudRecord = userRecord
-            self.loggedInUserReference = CKReference(recordID: userRecord.recordID, action: .None)
+            self.loggedInUserCustomModelReference = CKReference(recordID: userRecord.recordID, action: .None)
             completion?(success: true)
         }
     }

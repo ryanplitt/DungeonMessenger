@@ -17,6 +17,7 @@ class Conversation {
     
 
     let users: [CKReference]
+    var userz: [User] = []
     let timestamp: NSDate
     
     init(users: [CKReference], timestamp: NSDate){

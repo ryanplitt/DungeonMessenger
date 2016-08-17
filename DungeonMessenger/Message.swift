@@ -23,6 +23,17 @@ class Message {
     let sender: CKReference
     let timestamp: NSDate
     
+    var ckRecord: CKRecord {
+        let record = CKRecord(recordType: Message.typeKey)
+        
+        record.setValue(text, forKey: Message.textKey)
+        record.setValue(conversation, forKey: Message.conversationKey)
+        record.setValue(sender, forKey: Message.senderKey)
+        record.setValue(timestamp, forKey: Message.timestampKey)
+        
+        return record
+    }
+    
     init(text: String, conversation: CKReference, sender: CKReference, timestamp: NSDate) {
         self.text = text
         self.conversation = conversation
