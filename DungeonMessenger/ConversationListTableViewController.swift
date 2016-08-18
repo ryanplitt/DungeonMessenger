@@ -19,9 +19,12 @@ class ConversationListTableViewController: UITableViewController {
                     print("it was not a success. Opening Registration page")
                     self.showRegistrationViewController()
                 }
-                ConversationController.sharedController.fetchUsersConversations({
-                    self.tableView.reloadData()
+                    ConversationController.sharedController.fetchUsersConversations({
+                        dispatch_async(dispatch_get_main_queue(), {
+                        self.tableView.reloadData()
+                    })
                 })
+                
             })
         }
     }
@@ -39,13 +42,13 @@ class ConversationListTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return ConversationController.sharedController.conversations.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("conversationCell", forIndexPath: indexPath)
 
+        guard ConversationController.sharedController.conversations.count > 0 else { return UITableViewCell() }
         let userz = ConversationController.sharedController.conversations[indexPath.row].userz
         let nameOfUserz = userz.flatMap({$0.userName})
         cell.textLabel?.text = nameOfUserz.joinWithSeparator(", ")
@@ -91,7 +94,6 @@ class ConversationListTableViewController: UITableViewController {
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        dispatch_async(dispatch_get_main_queue()) {
             guard let indexPath = self.tableView.indexPathForSelectedRow else {return}
             ConversationController.sharedController.currentConversation = ConversationController.sharedController.conversations[indexPath.row]
             ConversationController.sharedController.setCurrentConversationReference {
@@ -108,5 +110,4 @@ class ConversationListTableViewController: UITableViewController {
                 detailVC.transitionFromExisting = true
             }
         }
-    }
 }

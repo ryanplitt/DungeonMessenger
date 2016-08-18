@@ -88,7 +88,6 @@ class ConversationController {
             self.getUserNamesFromConversation(self.conversations, completion: {
                 completion(completion())
             })
-            completion()
         }
     }
     
@@ -105,7 +104,6 @@ class ConversationController {
                         completion()
                 })
             }
-            completion()
         }
     }
     
@@ -140,7 +138,11 @@ class ConversationController {
                 completion()
                 return
             }
-            self.messagesInConversation = records.flatMap({Message(ckRecord: $0)})
+            let unsortedMessages = records.flatMap({Message(ckRecord: $0)})
+            self.messagesInConversation = unsortedMessages.sort({ (message1, message2) -> Bool in
+                message1.timestamp.timeIntervalSince1970 < message2.timestamp.timeIntervalSince1970
+            })
+            completion()
         }
     }
     

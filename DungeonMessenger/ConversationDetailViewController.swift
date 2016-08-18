@@ -25,7 +25,6 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
     }
     
     override func viewDidAppear(animated: Bool) {
-        dispatch_async(dispatch_get_main_queue()) {
         if self.transitionFromExisting == false {
             ConversationController.sharedController.setCurrentConversationReference({ 
                 self.transitionFromExisting = true
@@ -38,10 +37,11 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
         }
         guard let conversation = ConversationController.sharedController.currentConversation else {return}
         let userNames = conversation.userz.flatMap({$0.userName})
-        self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
-        ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) { 
-            self.tableViewOutlet.reloadData()
-        }
+            self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
+        ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) {
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.tableViewOutlet.reloadData()
+            })
         }
         
         
