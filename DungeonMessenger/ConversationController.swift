@@ -86,7 +86,7 @@ class ConversationController {
             self.conversations = records.flatMap({Conversation(ckRecord: $0)})
             print("Conversations Loaded")
             self.getUserNamesFromConversation(self.conversations, completion: {
-                completion()
+                completion(completion())
             })
             completion()
         }
@@ -97,14 +97,11 @@ class ConversationController {
             for user in conversation.users {
                 let predicate = NSPredicate(format: "ReferenceKey == %@", user.recordID)
                 CloudKitManager.sharedController.fetchRecordsWithType(User.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
-                    guard let user = User(ckRecord: record) else {
-                        print("Can't convert to User")
-                        completion()
-                        return
-                    }
-                    conversation.userz.append(user)
-                    print("User added sucessfully. \(record.recordID)")
+                    //
                     }, completion: { (records, error) in
+                        guard let records = records else { completion() ; return }
+                        conversation.userz = records.flatMap({User(ckRecord: $0)})
+                        print("Names added to Conversation List")
                         completion()
                 })
             }

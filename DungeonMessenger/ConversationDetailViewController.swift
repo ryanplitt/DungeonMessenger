@@ -26,28 +26,46 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
     
     override func viewDidAppear(animated: Bool) {
         dispatch_async(dispatch_get_main_queue()) {
-            if self.transitionFromExisting == true {
-                ConversationController.sharedController.setCurrentConversationReference {
-                    self.updateViewControllerForExistingConversation()
-                    guard let conversation = ConversationController.sharedController.currentConversation else {return}
-                    let userNames = conversation.userz.flatMap({$0.userName})
-                    self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
-                }
-            } else {
-                ConversationController.sharedController.setCurrentConversationReference {
-                    let userNames = UserController.sharedController.usersInMessage.flatMap({$0.userName})
-                    self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
-                    self.updateTableView()
-                }
-            }
-            guard ConversationController.sharedController.currentConversationReference != nil else {
-                print("The conversation reference was not set")
-                return
-            }
-            ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) {
-                self.tableViewOutlet.reloadData()
-            }
+        if self.transitionFromExisting == false {
+            ConversationController.sharedController.setCurrentConversationReference({ 
+                self.transitionFromExisting = true
+                print("Conversation Reference Set")
+            })
         }
+        guard ConversationController.sharedController.currentConversationReference != nil else {
+            print("The while loop didn't work properly. The Conversation Reference was not set in time")
+            return
+        }
+        guard let conversation = ConversationController.sharedController.currentConversation else {return}
+        let userNames = conversation.userz.flatMap({$0.userName})
+        self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
+        ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) { 
+            self.tableViewOutlet.reloadData()
+        }
+        }
+        
+        
+        
+        
+//            if self.transitionFromExisting == true {
+//                ConversationController.sharedController.setCurrentConversationReference {
+//                    self.updateViewControllerForExistingConversation()
+//                    
+//                    
+//                }
+//            } else {
+//                ConversationController.sharedController.setCurrentConversationReference {
+//                    let userNames = UserController.sharedController.usersInMessage.flatMap({$0.userName})
+//                    self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
+//                }
+//        }
+//            guard ConversationController.sharedController.currentConversationReference != nil else {
+//                print("The conversation reference was not set")
+//                return
+//            }
+//            ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) {
+//                self.tableViewOutlet.reloadData()
+//            }
     }
     
     func updateTableView(){
@@ -75,10 +93,12 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
                     self.tableViewOutlet.reloadData()
                 }
             })
-        } else if let messageText = textMessageInputTextField.text {
+        } else if let messageText = self.textMessageInputTextField.text {
         ConversationController.sharedController.sendNewMessage(messageText)
             self.tableViewOutlet.reloadData()
         }
+        self.textMessageInputTextField.text = ""
+        self.resignFirstResponder()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

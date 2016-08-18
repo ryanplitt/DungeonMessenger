@@ -12,17 +12,15 @@ class ConversationListTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserController.sharedController.getContacts()
         UserController.sharedController.setCurrentUser {
             UserController.sharedController.ObtainActiveLoggedInUserReference({ (success) in
                 if success != true {
                     print("it was not a success. Opening Registration page")
                     self.showRegistrationViewController()
-                } else {
-                    print("It seems to be working")
                 }
                 ConversationController.sharedController.fetchUsersConversations({
                     self.tableView.reloadData()
-                    UserController.sharedController.getContacts()
                 })
             })
         }
@@ -93,20 +91,22 @@ class ConversationListTableViewController: UITableViewController {
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        guard let indexPath = self.tableView.indexPathForSelectedRow else {return}
-        ConversationController.sharedController.currentConversation = ConversationController.sharedController.conversations[indexPath.row]
-        ConversationController.sharedController.setCurrentConversationReference {
-            guard let usersInConversation = ConversationController.sharedController.currentConversation?.userz else {
-                print("the users in the conversation were not loaded properly.")
-                return
+        dispatch_async(dispatch_get_main_queue()) {
+            guard let indexPath = self.tableView.indexPathForSelectedRow else {return}
+            ConversationController.sharedController.currentConversation = ConversationController.sharedController.conversations[indexPath.row]
+            ConversationController.sharedController.setCurrentConversationReference {
+                guard let usersInConversation = ConversationController.sharedController.currentConversation?.userz else {
+                    print("the users in the conversation were not loaded properly.")
+                    return
+                }
+                UserController.sharedController.usersInMessage = usersInConversation
+                guard let detailVC = segue.destinationViewController as? ConversationDetailViewController else {
+                    print("Couldn't cast as destination view controller")
+                    return
+                }
+                detailVC.navigationItem.title = "User(s) name(s)"
+                detailVC.transitionFromExisting = true
             }
-            UserController.sharedController.usersInMessage = usersInConversation
-            guard let detailVC = segue.destinationViewController as? ConversationDetailViewController else {
-                print("Couldn't cast as destination view controller")
-                return
-            }
-            detailVC.navigationItem.title = "User(s) name(s)"
-            detailVC.transitionFromExisting = true
         }
     }
 }
