@@ -14,13 +14,7 @@ class UserController {
     
     // MARK: - Conversation Variables
     var loggedInUserICloudRecord: CKRecord?
-    var loggedInUserModelObject: User? {
-        guard let loggedInUserICloudRecord = loggedInUserICloudRecord else {
-            print("There was no logged in user")
-            return nil
-        }
-        return User(ckRecord: loggedInUserICloudRecord)
-    }
+    var loggedInUserModelObject: User?
     var loggedInUserAppleReference: CKReference?
     var loggedInUserCustomModelReference: CKReference?
     var contacts: [User] = []
@@ -88,6 +82,7 @@ class UserController {
                 return
             }
             self.loggedInUserCustomModelReference = CKReference(recordID: userRecord.recordID, action: .None)
+            self.loggedInUserModelObject = User(ckRecord: userRecord)
             completion?(success: true)
         }
     }

@@ -58,8 +58,8 @@ class ConversationController {
     
     func setCurrentConversationReference(completion: () -> Void) {
         
-//        let predicate = NSPredicate(format: "Users == %@", self.ckReferencesOfUsersInConversation)
-        let predicate = NSPredicate(value: true)
+        let predicate = NSPredicate(format: "Users CONTAINS %@", argumentArray: self.ckReferencesOfUsersInConversation)
+//        let predicate = NSPredicate(value: true)
         CloudKitManager.sharedController.fetchRecordsWithType(Conversation.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
             print("There was a conversation record found!")
             }) { (records, error) in
@@ -79,7 +79,8 @@ class ConversationController {
     }
     
     func fetchUsersConversations(completion: () -> Void){
-        CloudKitManager.sharedController.fetchRecordsWithType(Conversation.typeKey, predicate: NSPredicate(value: true), recordFetchedBlock: { (record) in
+        let predicate = NSPredicate(format: "Users CONTAINS %@", UserController.sharedController.loggedInUserAppleReference!)
+        CloudKitManager.sharedController.fetchRecordsWithType(Conversation.typeKey, predicate: predicate, recordFetchedBlock: { (record) in
             //
         }) { (records, error) in
             guard let records = records else {completion() ; return}
@@ -110,20 +111,24 @@ class ConversationController {
     
     // MARK: - MESSAGE FUNCTIONS
     
-    func sendNewMessage(text: String) {
+    func sendNewMessage(text: String, completion: () -> Void) {
         guard let sender = UserController.sharedController.loggedInUserCustomModelReference,
             let conversation = ConversationController.sharedController.currentConversationReference else {
                 print("There was either a conversation reference or user reference not made")
+                completion()
                 return
         }
         let newMessage = Message(text: text, conversation: conversation, sender: sender, timestamp: NSDate())
+        newMessage.senderUser = UserController.sharedController.loggedInUserModelObject!
         self.messagesInConversation.append(newMessage)
         CloudKitManager.sharedController.saveRecord(newMessage.ckRecord) { (record, error) in
             guard record != nil else {
                 print("There was a problem saving the new Message in iCloud")
+                completion()
                 return
             }
             print("The Message was saved to icloud")
+            completion()
         }
     }
     
@@ -142,10 +147,24 @@ class ConversationController {
             self.messagesInConversation = unsortedMessages.sort({ (message1, message2) -> Bool in
                 message1.timestamp.timeIntervalSince1970 < message2.timestamp.timeIntervalSince1970
             })
-            completion()
+            dispatch_async(dispatch_get_main_queue(), {
+                for message in self.messagesInConversation {
+                    CloudKitManager.sharedController.fetchRecordWithID(message.sender.recordID, completion: { (record, error) in
+                        guard let record = record else {
+                            print(error?.localizedDescription)
+                            completion()
+                            return
+                        }
+                        let user =  User(ckRecord: record)
+                        message.senderUser = user
+                        print(message.senderUser?.userName)
+                        completion()
+                    })
+                }
+            })
+            
         }
     }
-    
     
     
     

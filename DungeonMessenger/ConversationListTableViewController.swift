@@ -38,7 +38,6 @@ class ConversationListTableViewController: UITableViewController {
         }
     }
 
-
     // MARK: - Table view data source
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -96,7 +95,6 @@ class ConversationListTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             guard let indexPath = self.tableView.indexPathForSelectedRow else {return}
             ConversationController.sharedController.currentConversation = ConversationController.sharedController.conversations[indexPath.row]
-            ConversationController.sharedController.setCurrentConversationReference {
                 guard let usersInConversation = ConversationController.sharedController.currentConversation?.userz else {
                     print("the users in the conversation were not loaded properly.")
                     return
@@ -106,8 +104,13 @@ class ConversationListTableViewController: UITableViewController {
                     print("Couldn't cast as destination view controller")
                     return
                 }
-                detailVC.navigationItem.title = "User(s) name(s)"
+        ConversationController.sharedController.setCurrentConversationReference {
+
+            dispatch_async(dispatch_get_main_queue(), { 
+                let userNamesInConversation = usersInConversation.flatMap({$0.userName})
+            detailVC.navigationItem.title = userNamesInConversation.joinWithSeparator(", ")
                 detailVC.transitionFromExisting = true
+            })
             }
         }
 }

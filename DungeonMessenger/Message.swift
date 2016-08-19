@@ -22,6 +22,7 @@ class Message {
     let conversation: CKReference
     let sender: CKReference
     let timestamp: NSDate
+    var senderUser: User?
     
     var ckRecord: CKRecord {
         let record = CKRecord(recordType: Message.typeKey)
