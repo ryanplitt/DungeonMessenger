@@ -101,9 +101,10 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath) as? TextMessageTableViewCell
+       
+        let message = ConversationController.sharedController.messagesInConversation[indexPath.row]
+        cell?.updateWithCell(message)
         
-        cell?.senderLabel.text = ConversationController.sharedController.messagesInConversation[indexPath.row].senderUser?.userName
-        cell?.textMessageLabel.text = ConversationController.sharedController.messagesInConversation[indexPath.row].text
         return cell ?? UITableViewCell()
     }
     

@@ -185,8 +185,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="383" height="69.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAS-qQ-1CU">
-                                                    <rect key="frame" x="16" y="0.0" width="259" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAS-qQ-1CU">
+                                                    <rect key="frame" x="16" y="0.0" width="26.5" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="Zzj-Ym-qZt"/>
                                                     </constraints>
@@ -224,7 +224,11 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="senderLabel" destination="dAS-qQ-1CU" id="07u-Dc-9Ne"/>
+                                            <outlet property="senderLeadingMargin" destination="kl7-ac-Di3" id="j6y-BY-Ddb"/>
+                                            <outlet property="senderTraillingMargin" destination="FHh-wY-jwm" id="WSE-iw-gWR"/>
                                             <outlet property="textMessageLabel" destination="ukR-Cz-wur" id="1dv-Su-Gnl"/>
+                                            <outlet property="textMessageLeadingMargin" destination="WbY-PP-7qQ" id="9ax-yj-Ukx"/>
+                                            <outlet property="textMessageTraillingMargin" destination="vYT-wZ-XJu" id="yHZ-Kw-ZKg"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
