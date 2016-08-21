@@ -22,36 +22,35 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
         super.viewDidLoad()
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.updateTableView), name: "messagesUpdated", object: nil)
-        
+        self.tableViewOutlet.separatorColor = UIColor.clearColor()
     }
     
     override func viewDidAppear(animated: Bool) {
         let delay = 0.5 * Double(NSEC_PER_SEC)
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(time, dispatch_get_main_queue()) {
-        if self.transitionFromExisting == false {
-            ConversationController.sharedController.setCurrentConversationReference({ 
-                self.transitionFromExisting = true
-                print("Conversation Reference Set")
-            })
-        }
-        guard ConversationController.sharedController.currentConversationReference != nil else {
-            print("The while loop didn't work properly. The Conversation Reference was not set in time")
-            return
-        }
-        guard let conversation = ConversationController.sharedController.currentConversation else {return}
-        let userNames = conversation.userz.flatMap({$0.userName})
+            ConversationController.sharedController.messagesInConversation.removeAll()
+            if self.transitionFromExisting == false {
+                ConversationController.sharedController.setCurrentConversationReference({
+                    self.transitionFromExisting = true
+                    print("Conversation Reference Set")
+                })
+            }
+            guard ConversationController.sharedController.currentConversationReference != nil else {
+                print("The Conversation Reference was not set in time")
+                return
+            }
+            guard let conversation = ConversationController.sharedController.currentConversation else {return}
+            let userNames = conversation.userz.flatMap({$0.userName})
             self.usersInMessageTextField.text = userNames.joinWithSeparator(", ")
-        ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) {
-            dispatch_async(dispatch_get_main_queue(), { 
-                self.tableViewOutlet.reloadData()
-            })
-        }
+            ConversationController.sharedController.loadMessagesFromConversation(ConversationController.sharedController.currentConversationReference!) {
+                //
+            }
         }
     }
     
     func updateTableView(){
-        dispatch_async(dispatch_get_main_queue()) { 
+        dispatch_async(dispatch_get_main_queue()) {
             self.tableViewOutlet.reloadData()
             self.scrollToBottom()
         }
@@ -59,13 +58,13 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
     
     
     func scrollToBottom(){
-        let indexPath = NSIndexPath(forRow: ConversationController.sharedController.messagesInConversation.count-1, inSection: 0)
-        tableViewOutlet.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
+        guard ConversationController.sharedController.messagesInConversation.count > 1 else {return}
+            let indexPath = NSIndexPath(forRow: ConversationController.sharedController.messagesInConversation.count-1, inSection: 0)
+            self.tableViewOutlet.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
     }
     
     func updateViewControllerForExistingConversation(){
         self.usersAndButtonHeaderView.hidden = false
-        self.tableViewOutlet.sizeToFit()
     }
     
     @IBAction func addNewUserToConversationButtonTapped(sender: AnyObject) {
@@ -90,27 +89,26 @@ class ConversationDetailViewController: UIViewController, UITableViewDelegate, U
                 self.updateTableView()
             })
         }
+        //
         self.textMessageInputTextField.text = ""
         self.resignFirstResponder()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return ConversationController.sharedController.messagesInConversation.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath) as? TextMessageTableViewCell
+        guard let cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath) as? TextMessageTableViewCell else {return UITableViewCell()}
        
         let message = ConversationController.sharedController.messagesInConversation[indexPath.row]
-        cell?.updateWithCell(message)
         
-        return cell ?? UITableViewCell()
+        cell.updateWithCell(message)
+        return cell
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        tableView.estimatedRowHeight = 35.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableViewOutlet.estimatedRowHeight = 30
         return UITableViewAutomaticDimension
     }
     

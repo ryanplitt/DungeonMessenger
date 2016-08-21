@@ -178,27 +178,39 @@
                                 <rect key="frame" x="-4" y="116" width="383" height="507"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="TextMessageTableViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="textCell" id="zhg-GY-4ML" customClass="TextMessageTableViewCell" customModule="DungeonMessenger" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" restorationIdentifier="TextMessageTableViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="textCell" id="zhg-GY-4ML" customClass="TextMessageTableViewCell" customModule="DungeonMessenger" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="383" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" tableViewCell="zhg-GY-4ML" id="z2D-IV-7fZ">
                                             <rect key="frame" x="0.0" y="0.0" width="383" height="69.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAS-qQ-1CU">
-                                                    <rect key="frame" x="16" y="0.0" width="26.5" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAS-qQ-1CU">
+                                                    <rect key="frame" x="16" y="0.0" width="259" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="Zzj-Ym-qZt"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="10"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="10"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" preservesSuperviewLayoutMargins="YES" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ukR-Cz-wur">
-                                                    <rect key="frame" x="8" y="20" width="267" height="33.5"/>
+                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lQv-9k-lLc">
+                                                    <rect key="frame" x="4" y="15" width="42.5" height="43.5"/>
                                                     <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="14"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" preservesSuperviewLayoutMargins="YES" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ukR-Cz-wur">
+                                                    <rect key="frame" x="8" y="20" width="34.5" height="33.5"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="267" id="4zn-E2-6Yl"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="14"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -208,13 +220,17 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="lQv-9k-lLc" firstAttribute="top" secondItem="ukR-Cz-wur" secondAttribute="top" constant="-5" id="0b3-AJ-nF1"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="ukR-Cz-wur" secondAttribute="bottom" constant="8" id="AEC-lP-5ls"/>
+                                                <constraint firstItem="ukR-Cz-wur" firstAttribute="left" secondItem="z2D-IV-7fZ" secondAttribute="left" constant="8" id="DoK-9i-arP"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="dAS-qQ-1CU" secondAttribute="trailing" constant="100" id="FHh-wY-jwm"/>
-                                                <constraint firstItem="ukR-Cz-wur" firstAttribute="leading" secondItem="z2D-IV-7fZ" secondAttribute="leadingMargin" id="WbY-PP-7qQ"/>
+                                                <constraint firstItem="lQv-9k-lLc" firstAttribute="trailing" secondItem="ukR-Cz-wur" secondAttribute="trailing" constant="4" id="STT-yZ-Zes"/>
+                                                <constraint firstItem="lQv-9k-lLc" firstAttribute="bottom" secondItem="ukR-Cz-wur" secondAttribute="bottom" constant="5" id="aDH-SG-FFY"/>
+                                                <constraint firstItem="lQv-9k-lLc" firstAttribute="leading" secondItem="ukR-Cz-wur" secondAttribute="leading" constant="-4" id="aey-Sl-SGv"/>
                                                 <constraint firstItem="ukR-Cz-wur" firstAttribute="top" secondItem="dAS-qQ-1CU" secondAttribute="bottom" id="hue-Hz-vPi"/>
                                                 <constraint firstItem="dAS-qQ-1CU" firstAttribute="leading" secondItem="z2D-IV-7fZ" secondAttribute="leadingMargin" constant="8" id="kl7-ac-Di3"/>
                                                 <constraint firstItem="dAS-qQ-1CU" firstAttribute="top" secondItem="z2D-IV-7fZ" secondAttribute="top" id="v3y-wK-qTw"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="ukR-Cz-wur" secondAttribute="trailing" constant="100" id="vYT-wZ-XJu"/>
+                                                <constraint firstItem="ukR-Cz-wur" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="z2D-IV-7fZ" secondAttribute="trailingMargin" priority="750" constant="-100" id="vYT-wZ-XJu"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <userDefinedRuntimeAttributes>
@@ -223,11 +239,12 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <outlet property="highlightView" destination="lQv-9k-lLc" id="YRU-5O-Tid"/>
                                             <outlet property="senderLabel" destination="dAS-qQ-1CU" id="07u-Dc-9Ne"/>
                                             <outlet property="senderLeadingMargin" destination="kl7-ac-Di3" id="j6y-BY-Ddb"/>
                                             <outlet property="senderTraillingMargin" destination="FHh-wY-jwm" id="WSE-iw-gWR"/>
                                             <outlet property="textMessageLabel" destination="ukR-Cz-wur" id="1dv-Su-Gnl"/>
-                                            <outlet property="textMessageLeadingMargin" destination="WbY-PP-7qQ" id="9ax-yj-Ukx"/>
+                                            <outlet property="textMessageLeadingMargin" destination="DoK-9i-arP" id="LAg-87-sF7"/>
                                             <outlet property="textMessageTraillingMargin" destination="vYT-wZ-XJu" id="yHZ-Kw-ZKg"/>
                                         </connections>
                                     </tableViewCell>
